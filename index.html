@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дело №2016: Трагедия Ямала — квест по сибирской язве</title>
+<style>
+:root{
+--bg:#f4ecd8;
+--ink:#2b2b2b;
+--ochre:#b8860b;
+--burgundy:#6b1f2e;
+--burgundy-dark:#4a1520;
+--grey:#4a4a4a;
+--paper:rgba(251,245,228,0.94);
+--shadow:rgba(0,0,0,.35);
+--green:#2e7d32;
+--red:#b71c1c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:Georgia,"Times New Roman",serif;color:var(--ink);line-height:1.55;min-height:100vh;position:relative}
+.bg-layer{position:fixed;inset:0;background-image:url('images/yamal_tundra.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;z-index:-1}
+.top-bar{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(251,245,228,0.92);border-bottom:2px solid var(--burgundy);backdrop-filter:blur(4px)}
+.author{font-size:12.5px;color:var(--grey);font-style:italic;max-width:60%}
+.score{font-size:22px;font-weight:bold;color:var(--burgundy);font-family:Georgia,serif}
+.container{max-width:960px;margin:0 auto;padding:24px 16px 80px}
+.card{background:var(--paper);border:1px solid #c9b98a;border-radius:6px;padding:28px 28px 24px;box-shadow:0 4px 14px var(--shadow);margin-bottom:20px;backdrop-filter:blur(2px)}
+.card h1,.card h2,.card h3{color:var(--burgundy-dark);margin-bottom:12px}
+.card h1{font-size:28px;border-bottom:2px solid var(--ochre);padding-bottom:8px}
+.card h2{font-size:22px}
+.card h3{font-size:18px;color:var(--ink)}
+.lead{font-size:16px;margin-bottom:14px}
+.mission-header{display:flex;align-items:center;gap:14px;border-bottom:1px dashed var(--ochre);padding-bottom:10px;margin-bottom:18px}
+.mission-number{background:var(--burgundy);color:#fff;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;flex-shrink:0}
+.mission-title{font-size:20px;color:var(--burgundy-dark)}
+input[type="text"],input[type="number"],select,textarea{font-family:inherit;font-size:15px;padding:8px 10px;border:1px solid #8a7a55;border-radius:4px;background:#fff;width:100%}
+input[type="text"]:focus,input[type="number"]:focus,select:focus{outline:2px solid var(--ochre)}
+label{display:block;margin:8px 0 4px;font-weight:bold;color:var(--grey)}
+.checkbox-group,.radio-group{background:rgba(251,248,238,0.85);border:1px solid #d9cda5;border-radius:4px;padding:10px 12px;margin:10px 0}
+.checkbox-group label,.radio-group label{display:flex;align-items:flex-start;gap:10px;font-weight:normal;cursor:pointer;padding:6px 0;border-bottom:1px dotted #c9b98a}
+.checkbox-group label:last-child,.radio-group label:last-child{border-bottom:none}
+.checkbox-group input,.radio-group input{margin-top:3px;flex-shrink:0}
+.btn{font-family:inherit;font-size:16px;padding:10px 22px;background:var(--burgundy);color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background .2s;margin-top:14px}
+.btn:hover:not(:disabled){background:var(--burgundy-dark)}
+.btn:disabled{background:#999;cursor:not-allowed;opacity:.6}
+.btn-secondary{background:var(--ochre)}
+.btn-secondary:hover:not(:disabled){background:#8a6608}
+.feedback{margin-top:14px;padding:12px 14px;border-left:4px solid var(--burgundy);background:rgba(251,232,235,0.95);border-radius:3px;font-size:15px}
+.feedback.success{border-left-color:var(--green);background:rgba(232,245,233,0.95)}
+.order-list{list-style:none;padding:0}
+.order-list li{background:#fff;border:1px solid #c9b98a;padding:10px 12px;margin:6px 0;border-radius:4px;cursor:pointer;transition:background .15s,border-color .15s;display:flex;align-items:center;gap:10px}
+.order-list li:hover{background:#fbf5e4}
+.order-list li .step-num{background:#c9b98a;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;flex-shrink:0}
+.order-list li.selected{background:#fbe8eb;border-color:var(--burgundy)}
+.order-list li.selected .step-num{background:var(--burgundy)}
+.tf-grid{display:grid;gap:10px}
+.tf-item{background:#fff;border:1px solid #c9b98a;padding:12px;border-radius:4px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.tf-item .tf-text{flex:1;min-width:200px}
+.tf-item select{width:auto;min-width:100px;max-width:100%;box-sizing:border-box}
+.illustration{display:flex;justify-content:center;gap:20px;margin:18px 0;padding:14px;background:rgba(251,248,238,0.9);border:1px solid #d9cda5;border-radius:4px;flex-wrap:wrap}
+.illustration svg{max-width:100%;height:auto}
+.portrait{float:right;margin:0 0 14px 18px;width:240px;border:3px double var(--burgundy);padding:4px;background:#fff;box-shadow:2px 2px 8px var(--shadow)}
+.portrait img{width:100%;display:block}
+.certificate{border:8px double var(--burgundy);padding:40px;background:#fff;text-align:center;margin:20px auto;max-width:700px}
+.certificate h2{font-size:32px;color:var(--burgundy);margin-bottom:8px;letter-spacing:2px}
+.certificate h3{font-size:18px;color:var(--ochre);margin-bottom:20px}
+.cert-field{margin:16px auto;border-bottom:1px solid var(--ink);padding:4px 0;min-width:300px;display:inline-block;font-size:18px}
+.cert-label{font-size:13px;color:var(--grey);margin-bottom:4px}
+@media print{body{background:#fff}.bg-layer,.top-bar,.btn,.no-print{display:none!important}.container{padding:0;max-width:100%}.card{box-shadow:none;border:none;padding:0;background:#fff}.certificate{border:8px double #000;page-break-inside:avoid}}
+@media (max-width:720px){.card{padding:18px 14px}.card h1{font-size:22px}.card h2{font-size:18px}.portrait{float:none;margin:0 auto 14px;width:200px}.author{font-size:11px;max-width:55%}.score{font-size:18px}.illustration{flex-direction:column;align-items:center}.certificate{padding:24px 16px}.certificate h2{font-size:24px}.cert-field{min-width:200px;font-size:16px}.tf-item{flex-direction:column;align-items:stretch}.tf-item select{width:100%;max-width:100%}}
+.hidden{display:none}
+.narrative{background:rgba(251,245,228,0.85);border-left:4px solid var(--ochre);padding:12px 16px;margin:14px 0;font-style:italic;color:var(--grey)}
+.hint{background:rgba(255,248,220,0.95);border-left:4px solid var(--ochre);padding:10px 14px;margin:12px 0;font-size:14px}
+.order-instruction{background:rgba(251,248,238,0.9);border:1px dashed var(--ochre);padding:10px 14px;border-radius:4px;font-size:14px;color:var(--grey);margin-bottom:12px}
+.history-block{background:rgba(251,245,228,0.88);border:1px solid #c9b98a;border-radius:4px;padding:14px 16px;margin:12px 0;font-size:15px}
+.history-block b{color:var(--burgundy-dark)}
+.drag-container{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.drag-zone{background:rgba(255,255,255,0.7);border:2px dashed #c9b98a;border-radius:6px;padding:12px;min-height:150px;transition:all .2s}
+.drag-zone h4{margin-bottom:8px;font-size:15px;text-align:center;color:var(--burgundy-dark)}
+.drag-zone.correct-zone{border-color:var(--green)}
+.drag-zone.correct-zone h4{color:var(--green)}
+.drag-zone.wrong-zone{border-color:var(--red)}
+.drag-zone.wrong-zone h4{color:var(--red)}
+.drag-zone.pool-zone{grid-column:1/-1;border-color:#8a7a55}
+.drag-zone.drag-over{background:rgba(184,134,11,0.15);border-color:var(--ochre);border-style:solid}
+.drag-item{background:#fff;border:1px solid #c9b98a;border-radius:4px;padding:8px 10px;margin:6px 0;cursor:grab;font-size:14px;transition:all .15s;user-select:none;touch-action:none}
+.drag-item:hover{background:#fbf5e4;border-color:var(--ochre)}
+.drag-item:active{cursor:grabbing}
+.drag-item.dragging{opacity:0.5;transform:scale(0.95)}
+.drag-item.correct{background:#e8f5e9;border-color:var(--green)}
+.drag-item.wrong{background:#fbe9e7;border-color:var(--red)}
+@media (max-width:720px){.drag-container{grid-template-columns:1fr}.drag-zone.pool-zone{grid-column:auto}}
+.svg-click-area{display:flex;justify-content:center;margin:14px 0;position:relative}
+.svg-click-area svg{max-width:100%;height:auto;cursor:pointer}
+.svg-click-area svg .clickable{transition:fill .2s,stroke .2s}
+.svg-click-area svg .clickable:hover{fill:#fbe8eb;stroke:var(--burgundy)}
+.svg-click-area svg .clickable.active{fill:#e8f5e9;stroke:var(--green);stroke-width:2}
+.svg-click-area svg .clickable.wrong-active{fill:#fbe9e7;stroke:var(--red);stroke-width:2}
+.svg-tooltip{position:absolute;background:rgba(43,43,43,0.92);color:#fff;padding:6px 10px;border-radius:4px;font-size:13px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:10;white-space:nowrap}
+.svg-tooltip.visible{opacity:1}
+/* Image styles */
+.quest-image{max-width:100%;height:auto;border:2px solid var(--ochre);border-radius:4px;margin:14px 0;box-shadow:0 2px 8px var(--shadow)}
+.image-caption{font-size:13px;color:var(--grey);font-style:italic;text-align:center;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="top-bar">
+<div class="author">Составитель квеста — к.м.н., доцент кафедры инфекционных болезней и фтизиатрии РязГМУ Шутова О.В.</div>
+<div class="score" id="scoreDisplay">Баллы: 0 / 150</div>
+</div>
+<div class="container" id="app"></div>
+
+<script>
+const state = {
+studentName: '',
+currentMission: 0,
+score: 0,
+missionScores: new Array(15).fill(null),
+answers: {},
+shuffledOrders: {},
+shuffledOptions: {},
+dragZones: {}
+};
+
+function shuffle(arr){
+const a = [...arr];
+for(let i = a.length - 1; i > 0; i--){
+const j = Math.floor(Math.random() * (i + 1));
+[a[i], a[j]] = [a[j], a[i]];
+}
+if(a.length > 1 && a.every((v,i)=>v.id === arr[i].id)){
+[a[0], a[1]] = [a[1], a[0]];
+}
+return a;
+}
+
+function getShuffledItems(missionId, items){
+if(!state.shuffledOrders[missionId]) state.shuffledOrders[missionId] = shuffle(items);
+return state.shuffledOrders[missionId];
+}
+
+function getShuffledOptions(missionId, options){
+if(!state.shuffledOptions[missionId]) state.shuffledOptions[missionId] = shuffle(options);
+return state.shuffledOptions[missionId];
+}
+
+function initDragZones(missionId, items){
+if(!state.dragZones[missionId]){
+state.dragZones[missionId] = {
+correctZone: [],
+wrongZone: [],
+pool: shuffle(items).map(x=>x.id)
+};
+}
+return state.dragZones[missionId];
+}
+
+const missions = {
+1: {
+title: 'Эпидемиологическая обстановка',
+narrative: 'Июль 2016 года. Ямальский район. Температура держится выше +35°C — беспрецедентная аномалия для Крайнего Севера. Вечная мерзлота оттаяла на глубину более метра. Начался массовый падеж оленей. У заболевших детей высокая лихорадка и боли в животе. Местные жители, считая, что олени погибают от теплового удара, употребляли в пищу их сырое мясо и свежую кровь. Определите факторы, которые привели к формированию этого эпидемического очага.',
+type: 'checkbox',
+options: [
+{id:'e1', text:'Аномальная жара и деградация вечной мерзлоты, активировавшая старые «моровые поля»', correct:true},
+{id:'e2', text:'Употребление сырого мяса и крови больных оленей (алиментарный путь)', correct:true},
+{id:'e3', text:'Отсутствие вакцинации оленей и лиц из групп риска в предыдущие годы', correct:true},
+{id:'e4', text:'Возможная трансмиссивная передача через кровососущих насекомых', correct:true},
+{id:'e5', text:'Заражение произошло при употреблении термически обработанной оленины', correct:false},
+{id:'e6', text:'Сибирская язва передается от человека к человеку воздушно-капельным путем', correct:false}
+],
+correctIds:['e1','e2','e3','e4'],
+hint:'Сибирская язва не передается от человека к человеку. Источником являются травоядные животные. Вспышка на Ямале была обусловлена сочетанием климатических факторов (оттаивание скотомогильников), алиментарного пути (сырое мясо/кровь) и отсутствия вакцинации. Трансмиссивный путь (через насекомых) также не исключается.',
+successText:'Верно! Сочетание аномальной жары, оттаивания почвы, употребления сырого мяса и отсутствия вакцинации создало идеальные условия для вспышки.'
+},
+2: {
+title: 'Микробиологический портрет',
+narrative: 'В лаборатории выделен возбудитель. Это грамположительная палочка, образующая споры. Для понимания ее патогенности и устойчивости определите, какие утверждения о <i>Bacillus anthracis</i> являются верными.',
+image: '<div style="text-align:center;margin:14px 0"><img src="images/anthrax_microscope.jpg" alt="Микрофотография Bacillus anthracis" class="quest-image" style="max-width:400px"><div class="image-caption">Рис. 1. Микрофотография Bacillus anthracis (окраска по Граму). Видны грамположительные палочки, расположенные цепочками.</div></div>',
+type: 'truefalse',
+items:[
+{id:'tf1', text:'Споры B. anthracis могут сохраняться в почве более ста лет', correct:true},
+{id:'tf2', text:'Вегетативные формы возбудителя высокоустойчивы и погибают только при автоклавировании', correct:false},
+{id:'tf3', text:'Плазмида pXO1 кодирует синтез комплекса экзотоксина (протективный антиген, летальный и отечный факторы)', correct:true},
+{id:'tf4', text:'Плазмида pXO2 детерминирует синтез полиглутаминовой капсулы, защищающей бактерию от фагоцитоза', correct:true},
+{id:'tf5', text:'В живом организме и в невскрытых трупах происходит активное спорообразование', correct:false}
+],
+hint:'Вегетативные формы малоустойчивы (при 55°C погибают через 40 мин, при кипячении мгновенно). Спорообразования в трупах не происходит из-за отсутствия кислорода. Споры же крайне устойчивы (в почве более ста лет). Патогенность зависит от двух плазмид: pXO1 (токсины) и pXO2 (капсула).',
+successText:'Верно! Споры хранятся веками, вегетативные формы неустойчивы, а вирулентность обеспечивается двумя плазмидами: токсинообразованием и капсулой.'
+},
+3: {
+title: 'Входные ворота инфекции',
+narrative: 'В стационар поступили пациенты с разными клиническими формами болезни. Сопоставьте форму сибирской язвы с ее характерными клиническими проявлениями или путем заражения.',
+type: 'match',
+items:[
+{id:'d1', text:'Кожная форма (карбункулезная разновидность)', correct:'cut'},
+{id:'d2', text:'Ингаляционная форма', correct:'inh'},
+{id:'d3', text:'Желудочно-кишечная форма (оро-орофарингеальная разновидность)', correct:'gi'},
+{id:'d4', text:'Инъекционная форма', correct:'inj'}
+],
+options:[
+{id:'cut', text:'Безболезненный черный струп с венчиком пузырьков и выраженным отеком окружающих тканей'},
+{id:'inh', text:'Расширение средостения, геморрагический плеврит, тяжелая дыхательная недостаточность'},
+{id:'gi', text:'Выраженный отек шеи, дисфагия, язвы на миндалинах или задней стенке глотки'},
+{id:'inj', text:'Тяжелая инфекция мягких тканей у потребителей инъекционных наркотиков без типичного карбункула'},
+{id:'sep', text:'Первичный менингоэнцефалит без кожных проявлений'}
+],
+hint:'Кожная форма — это классический безболезненный карбункул. Ингаляционная проявляется геморрагическим медиастинитом (расширение средостения). Оро-орофарингеальная разновидность ЖКТ формы дает отек шеи и язвы в глотке. Инъекционная форма описана у наркопотребителей и протекает как некротизирующий фасциит.',
+successText:'Отлично! Вы верно сопоставили входные ворота инфекции с их специфическими клиническими синдромами.'
+},
+4: {
+title: 'Токсический каскад',
+narrative: 'Патогенез сибирской язвы обусловлен действием экзотоксина и капсулы. Расставьте компоненты патогенности в логической последовательности их взаимодействия с макроорганизмом.',
+type: 'order',
+items:[
+{id:'p1', text:'Протективный антиген (PA) связывается с рецепторами клетки-мишени и образует поры', order:1},
+{id:'p2', text:'Проникновение Летального фактора (LF) и Отечного фактора (EF) в цитоплазму клетки', order:2},
+{id:'p3', text:'LF вызывает лизис макрофагов и выброс цитокинов (ФНО-α, ИЛ-1β), EF повышает уровень цАМФ', order:3},
+{id:'p4', text:'Развитие отека тканей, цитотоксического действия и интоксикационного синдрома', order:4}
+],
+hint:'Токсин состоит из трех компонентов. Протективный антиген (PA) служит "ключом", открывающим пору в мембране клетки. Через него внутрь проникают Летальный (LF) и Отечный (EF) факторы, которые и запускают каскад патологических реакций.',
+successText:'Верно! PA открывает дверь, LF и EF проникают внутрь и разрушают клетку, вызывая клинику болезни.'
+},
+5: {
+title: 'Клиническая тактика при карбункуле',
+narrative: 'Фельдшер в поселке осмотрел пациента с классическим сибиреязвенным карбункулом на лице. Решив, что это обычный гнойник, он подготовил скальпель для вскрытия. Перетащите каждое действие в соответствующую категорию: «Правильные действия» или «Категорически запрещены». Зажмите левую кнопку мыши на элементе и перетащите его в нужную зону.',
+image: '<div style="text-align:center;margin:14px 0"><img src="images/anthrax_carbuncle.jpg" alt="Сибиреязвенный карбункул" class="quest-image" style="max-width:350px"><div class="image-caption">Рис. 2. Сибиреязвенный карбункул на лице. Характерный черный струп с венчиком пузырьков и выраженным отеком окружающих тканей.</div></div>',
+type: 'dragdrop',
+correctZoneTitle: '✓ Правильные действия',
+wrongZoneTitle: '✗ Категорически запрещены',
+items:[
+{id:'c1', text:'Наложение асептической повязки на карбункул', zone:'correct'},
+{id:'c2', text:'Хирургическое вскрытие и выдавливание карбункула', zone:'wrong'},
+{id:'c3', text:'Назначение системных антибиотиков (ципрофлоксацин или доксициклин)', zone:'correct'},
+{id:'c4', text:'Госпитализация в инфекционный стационар', zone:'correct'},
+{id:'c5', text:'Применение местной физиотерапии (УВЧ, прогревание) для ускорения созревания', zone:'wrong'},
+{id:'c6', text:'Введение противосибиреязвенного иммуноглобулина при генерализации', zone:'correct'},
+{id:'c7', text:'Использование мазей с антибиотиками на область карбункула', zone:'wrong'}
+],
+hint:'Категорически запрещено вскрывать, выдавливать или надрезать сибиреязвенный карбункул! Это приводит к генерализации инфекции, развитию сибиреязвенного сепсиса и менингита. Местно применяется только асептическая повязка. Физиотерапия и мази не показаны. Основное лечение — системные антибиотики и при необходимости иммуноглобулин.',
+successText:'Верно! Асептическая повязка, антибиотики, госпитализация и иммуноглобулин — правильная тактика. Хирургическое вмешательство, физиотерапия и мази категорически запрещены.'
+},
+6: {
+title: 'Скрытая угроза',
+narrative: 'В стационар доставлен пациент с тяжелой ингаляционной формой сибирской язвы. Состояние ухудшается стремительно. Выберите ВСЕ признаки, характерные для разгара ингаляционной формы.',
+type: 'checkbox',
+options:[
+{id:'t1', text:'Рентгенологическое расширение средостения (геморрагический медиастинит)', correct:true},
+{id:'t2', text:'Кашель с кровавой пенистой мокротой и цианоз', correct:true},
+{id:'t3', text:'Геморрагический менингит (развивается у половины пациентов)', correct:true},
+{id:'t4', text:'Безболезненный черный струп на коже', correct:false},
+{id:'t5', text:'Острый живот с кровавым поносом', correct:false}
+],
+correctIds:['t1','t2','t3'],
+hint:'Ингаляционная форма протекает крайне тяжело: геморрагический медиастинит (расширение средостения), кровавая мокрота, шок. У половины больных развивается вторичный геморрагический менингит. Струп характерен для кожной формы, а острый живот — для интестинальной.',
+successText:'Верно! Расширение средостения, кровавая мокрота и менингит — триада тяжелейшей ингаляционной формы.'
+},
+7: {
+title: 'Дифференциальный диагноз',
+narrative: 'На прием поступил пациент с язвенным поражением на руке. Сопоставьте заболевание с его отличительными признаками, чтобы не перепутать сибирскую язву с другими патологиями.',
+type: 'match',
+items:[
+{id:'dd1', text:'Сибиреязвенный карбункул', correct:'an'},
+{id:'dd2', text:'Фурункул (обычный гнойник)', correct:'fur'},
+{id:'dd3', text:'Рожа', correct:'ery'},
+{id:'dd4', text:'Чума (кожная форма)', correct:'pl'},
+{id:'dd5', text:'Туляремия (язвенно-бубонная форма)', correct:'tu'}
+],
+options:[
+{id:'an', text:'Безболезненный черный струп, выраженный студенистый отек, отсутствие чувствительности в центре'},
+{id:'fur', text:'Резко болезненное гнойное воспаление волосяного фолликула с некротическим стержнем'},
+{id:'ery', text:'Ярко-красное пятно с четкими фестончатыми краями, жжение, болезненность, без некроза'},
+{id:'pl', text:'Крайне болезненный бубон (лимфаденит), геморрагическое содержимое пустулы, тяжелая интоксикация'},
+{id:'tu', text:'Язва с приподнятыми валикообразными краями и регионарный лимфаденит'}
+],
+hint:'Главное отличие сибиреязвенного карбункула — его безболезненность (анестезия в центре) и массивный отек. Фурункул и рожа болезненны. Чумной бубон также резко болезнен. Туляремийная язва имеет приподнятые валикообразные края и сопровождается регионарным лимфаденитом.',
+successText:'Отлично! Безболезненность карбункула — ключевой дифференциально-диагностический признак.'
+},
+8: {
+title: 'Биологическое оружие',
+narrative: 'Сибирская язва рассматривается как потенциальное биологическое оружие. Определите, какие утверждения о применении B. anthracis в качестве агента биотеррора являются верными.',
+image: '<div style="text-align:center;margin:14px 0"><img src="images/biohazard_sign.jpg" alt="Знак биологической опасности" class="quest-image" style="max-width:200px"><div class="image-caption"> Bacillus anthracis относится ко II группе патогенности.</div></div>',
+type: 'truefalse',
+items:[
+{id:'bio1', text:'Споры B. anthracis могут быть диспергированы в виде аэрозоля для ингаляционного заражения', correct:true},
+{id:'bio2', text:'Летальная доза при ингаляционном пути заражения составляет восемь-десять тысяч спор', correct:true},
+{id:'bio3', text:'В 2001 году в США были зафиксированы случаи биотеррористических атак с использованием спор сибирской язвы', correct:true},
+{id:'bio4', text:'B. anthracis легко передается от человека к человеку, что делает его идеальным биологическим оружием', correct:false},
+{id:'bio5', text:'Штамм Ames, использованный в атаках 2001 года, был выделен во время вспышки во Флориде', correct:true},
+{id:'bio6', text:'Сибирская язва может быть использована для заражения продовольственных запасов через добавление вегетативных форм', correct:false}
+],
+hint:'Споры B. anthracis устойчивы и могут быть диспергированы в виде аэрозоля. Летальная доза при ингаляции — восемь-десять тысяч спор. В 2001 году в США произошла серия атак с письмами, содержащими споры штамма Ames. Однако сибирская язва не передается от человека к человеку, что ограничивает ее эпидемический потенциал. Вегетативные формы неустойчивы и не подходят для заражения продуктов.',
+successText:'Верно! Споры могут быть использованы как аэрозольное оружие, штамм Ames применялся в 2001 году, но передача между людьми невозможна.'
+},
+9: {
+title: 'Терапевтический арсенал',
+narrative: 'Пациенту с генерализованной формой сибирской язвы требуется экстренная помощь. Выберите ВСЕ препараты и средства, которые входят в современные стандарты лечения тяжелых форм.',
+type: 'checkbox',
+options:[
+{id:'pr1', text:'Ципрофлоксацин или Левофлоксацин (фторхинолоны)', correct:true},
+{id:'pr2', text:'Меропенем или Имипенем (карбапенемы)', correct:true},
+{id:'pr3', text:'Раксибакумаб (моноклональные антитела к протективному антигену)', correct:true},
+{id:'pr4', text:'Хирургическое иссечение карбункула', correct:false},
+{id:'pr5', text:'Доксициклин', correct:true},
+{id:'pr6', text:'Противостолбнячная сыворотка', correct:false}
+],
+correctIds:['pr1','pr2','pr3','pr5'],
+hint:'Лечение генерализованных форм комбинированное: бактерицидные препараты (фторхинолоны, карбапенемы) + ингибиторы синтеза белка. Раксибакумаб — специфический антитоксин (анти-PA). Хирургическое вмешательство на карбункуле запрещено. Противостолбнячная сыворотка неэффективна.',
+successText:'Верно! Комбинация мощных антибиотиков и специфического антитоксина (Раксибакумаб) — основа спасения жизни при генерализованной форме.'
+},
+10: {
+title: 'Профилактика и будущее',
+narrative: 'Вспышка ликвидирована. Необходимо предотвратить повторение трагедии. Определите, какие утверждения о профилактике и эпидемиологии сибирской язвы верны.',
+type: 'truefalse',
+items:[
+{id:'tf1', text:'Вакцинация сельскохозяйственных животных проводится ежегодно живой споровой вакциной', correct:true},
+{id:'tf2', text:'Лицам из групп риска (ветеринары, оленеводы) вакцинация проводится за семь-десять дней до выхода в очаг', correct:true},
+{id:'tf3', text:'После введения противосибиреязвенного иммуноглобулина вакцинацию можно проводить сразу же', correct:false},
+{id:'tf4', text:'Деградация вечной мерзлоты из-за изменения климата повышает риск активации старых скотомогильников', correct:true},
+{id:'tf5', text:'Трупы больных животных подлежат обязательному сжиганию или захоронению в специальных биотермических ямах', correct:true}
+],
+hint:'После введения иммуноглобулина вакцинация откладывается на месяц. Трупы животных подлежат обязательному сжиганию или захоронению в специальных биотермических ямах (скотомогильниках) с соблюдением строгих санитарных норм. Вакцинация животных — ежегодная.',
+successText:'Верно! Вакцинация животных, защита людей из групп риска и контроль за почвенными очагами (особенно в условиях таяния мерзлоты) — основа профилактики.'
+},
+11: {
+title: 'Наружные и внутренние формы',
+narrative: 'В стационар поступили пациенты с разными клиническими формами. Перетащите каждую форму сибирской язвы в соответствующую категорию: «Наружные (локализованные)» или «Внутренние (генерализованные)». Зажмите левую кнопку мыши на элементе и перетащите его в нужную зону.',
+type: 'dragdrop',
+correctZoneTitle: 'Наружные формы',
+wrongZoneTitle: 'Внутренние формы',
+items:[
+{id:'s1', text:'Кожная форма (карбункулезная)', zone:'correct'},
+{id:'s2', text:'Ингаляционная (легочная) форма', zone:'wrong'},
+{id:'s3', text:'Конъюнктивальная форма', zone:'correct'},
+{id:'s4', text:'Желудочно-кишечная (интестинальная) форма', zone:'wrong'},
+{id:'s5', text:'Инъекционная форма', zone:'wrong'},
+{id:'s6', text:'Оро-орофарингеальная разновидность', zone:'wrong'}
+],
+hint:'Наружные (локализованные) формы — это кожная и конъюнктивальная. Все остальные (ингаляционная, ЖКТ, инъекционная, оро-орофарингеальная) относятся к внутренним (генерализованным) формам и протекают значительно тяжелее.',
+successText:'Верно! Наружные формы — кожная и конъюнктивальная. Все остальные — внутренние (генерализованные).'
+},
+12: {
+title: 'Клинические формы и их особенности',
+narrative: 'Сопоставьте клиническую форму сибирской язвы с ее характерной особенностью течения.',
+type: 'match',
+items:[
+{id:'cl1', text:'Кожная форма (карбункулезная)', correct:'skin'},
+{id:'cl2', text:'Ингаляционная форма', correct:'inh'},
+{id:'cl3', text:'Желудочно-кишечная форма', correct:'gi'},
+{id:'cl4', text:'Инъекционная форма', correct:'inj'}
+],
+options:[
+{id:'skin', text:'Наиболее частая форма; при своевременном лечении летальность менее одного процента'},
+{id:'inh', text:'Наиболее тяжелая форма; летальность достигает 85-90% даже при лечении'},
+{id:'gi', text:'Характеризуется бурным началом, кровавой рвотой и поносом, парезом кишечника'},
+{id:'inj', text:'Новая форма, описанная у потребителей инъекционных наркотиков; нетипичная клиническая картина'},
+{id:'conj', text:'Возникает при внедрении спор в конъюнктиву; часто осложняется геморрагическим менингитом'}
+],
+hint:'Кожная форма — самая частая и наиболее благоприятная по прогнозу. Ингаляционная — самая тяжелая с высокой летальностью. ЖКТ форма протекает бурно с геморрагическими проявлениями. Инъекционная форма — новая, описанная в последние годы.',
+successText:'Отлично! Вы верно сопоставили формы с их клиническими особенностями.'
+},
+13: {
+title: 'Анатомия карбункула',
+narrative: 'На схеме изображен сибиреязвенный карбункул в стадии разгара. Наведите мышкой на области схемы, чтобы увидеть их названия. Выберите ВСЕ структуры, которые характерны именно для этой формы (не для фурункула или рожи). Нажимайте на области схемы.',
+type: 'svgclick',
+svg:`<svg width="360" height="280" viewBox="0 0 360 280" xmlns="http://www.w3.org/2000/svg">
+<title>Схема сибиреязвенного карбункула</title>
+<rect width="360" height="280" fill="#fbf5e4"/>
+<ellipse cx="180" cy="140" rx="150" ry="110" fill="#f5e6d3" stroke="#8a7a55" stroke-width="1.5"/>
+<ellipse class="clickable" data-id="edema" data-label="Студенистый отек окружающих тканей" cx="180" cy="140" rx="130" ry="95" fill="#f0d9c0" stroke="#8a7a55" stroke-width="1" opacity="0.7"/>
+<circle class="clickable" data-id="rim" data-label="Воспалительный валик красного цвета" cx="180" cy="140" r="70" fill="#e8b896" stroke="#8a7a55" stroke-width="1"/>
+<circle class="clickable" data-id="bubbles" data-label="Венчик дочерних пузырьков («симптом жемчужного ожерелья»)" cx="180" cy="75" r="6" fill="#fff" stroke="#8a7a55" stroke-width="1"/>
+<circle class="clickable" data-id="bubbles" data-label="Венчик дочерних пузырьков («симптом жемчужного ожерелья»)" cx="245" cy="100" r="6" fill="#fff" stroke="#8a7a55" stroke-width="1"/>
+<circle class="clickable" data-id="bubbles" data-label="Венчик дочерних пузырьков («симптом жемчужного ожерелья»)" cx="245" cy="180" r="6" fill="#fff" stroke="#8a7a55" stroke-width="1"/>
+<circle class="clickable" data-id="bubbles" data-label="Венчик дочерних пузырьков («симптом жемчужного ожерелья»)" cx="180" cy="205" r="6" fill="#fff" stroke="#8a7a55" stroke-width="1"/>
+<circle class="clickable" data-id="bubbles" data-label="Венчик дочерних пузырьков («симптом жемчужного ожерелья»)" cx="115" cy="180" r="6" fill="#fff" stroke="#8a7a55" stroke-width="1"/>
+<circle class="clickable" data-id="bubbles" data-label="Венчик дочерних пузырьков («симптом жемчужного ожерелья»)" cx="115" cy="100" r="6" fill="#fff" stroke="#8a7a55" stroke-width="1"/>
+<circle class="clickable" data-id="eschar" data-label="Черный безболезненный струп (карбункул)" cx="180" cy="140" r="35" fill="#2b2b2b" stroke="#000" stroke-width="1.5"/>
+<circle class="clickable" data-id="rod" data-label="Некротический стержень" cx="180" cy="140" r="12" fill="#6b1f2e" stroke="#4a1520" stroke-width="1"/>
+<text x="180" y="270" text-anchor="middle" font-size="12" fill="#4a4a4a" font-style="italic">Сибиреязвенный карбункул</text>
+</svg>`,
+correctIds:['edema','rim','bubbles','eschar'],
+wrongIds:['rod'],
+hint:'Характерные элементы карбункула: черный безболезненный струп в центре, воспалительный валик красного цвета, венчик дочерних пузырьков («симптом жемчужного ожерелья»), выраженный студенистый отек окружающих тканей. Некротический стержень характерен для фурункула, а не для карбункула.',
+successText:'Верно! Черный струп, воспалительный валик, венчик пузырьков и студенистый отек — классические признаки карбункула.'
+},
+14: {
+title: 'Осложнения сибирской язвы',
+narrative: 'Определите, какие утверждения об осложнениях сибирской язвы являются верными.',
+type: 'truefalse',
+items:[
+{id:'co1', text:'Геморрагический менингит развивается у половины пациентов с ингаляционной формой сибирской язвы и, как правило, заканчивается фатально', correct:true},
+{id:'co2', text:'К неспецифическим осложнениям сибирской язвы относятся бактериальные вторичные осложнения, среди которых чаще наблюдается пневмония', correct:true},
+{id:'co3', text:'Кожная форма сибирской язвы может осложниться вторичным сибиреязвенным сепсисом и менингитом', correct:true},
+{id:'co4', text:'Сибиреязвенный карбункул на верхней губе, подбородке и веках имеет особенно высокую летальность', correct:true},
+{id:'co5', text:'При сибирской язве никогда не развивается ДВС-синдром', correct:false}
+],
+hint:'При ингаляционной форме у 50% пациентов развивается геморрагический менингит, обычно фатальный. При сибирской язве возможны сепсис, менингит, пневмония, ДВС-синдром. Особенно опасна локализация карбункула на лице (верхняя губа, подбородок, веки).',
+successText:'Верно! Вы верно определили осложнения сибирской язвы.'
+},
+15: {
+title: 'Финальное расследование',
+narrative: 'Расследование завершено. На основе всех собранных данных определите, какие утверждения о вспышке на Ямале являются верными.',
+type: 'checkbox',
+options:[
+{id:'f1', text:'Вакцинацию оленей на Ямале отменили в 2007 году по научным обоснованиям', correct:true},
+{id:'f2', text:'Более половины заболевших составили дети старше года', correct:true},
+{id:'f3', text:'Тяжелое течение наблюдалось только у детей с желудочно-кишечной формой', correct:true},
+{id:'f4', text:'В разных точках очага доминировали различные клинические формы', correct:true},
+{id:'f5', text:'Химиопрофилактикой было охвачено более тринадцати тысяч человек', correct:false},
+{id:'f6', text:'Вакцинопрофилактикой было охвачено менее тысячи человек', correct:false}
+],
+correctIds:['f1','f2','f3','f4'],
+hint:'Химиопрофилактикой было охвачено менее тысячи человек (946), а вакцинопрофилактикой — более тринадцати тысяч человек (в утверждении цифры перепутаны). Остальные утверждения верны и отражают особенности вспышки на Ямале.',
+successText:'Верно! Вы верно определили все ключевые особенности вспышки на Ямале.'
+}
+};
+
+const app = document.getElementById('app');
+const scoreDisplay = document.getElementById('scoreDisplay');
+
+function updateScore(){
+scoreDisplay.textContent = `Баллы: ${state.score} / 150`;
+}
+
+function renderStart(){
+app.innerHTML = `
+<div class="card">
+<img class="portrait" src="images/anthrax_scientist.png" alt="Портрет эпидемиолога">
+<h1>Дело №2016: Трагедия Ямала</h1>
+<div class="history-block">
+<b>Июль 2016 года.</b> Ямальский район Ямало-Ненецкого автономного округа. Аномальная жара выше +35°C держится почти весь месяц — беспрецедентное явление для Крайнего Севера. Вечная мерзлота, хранившая споры сибирской язвы десятилетиями, начала оттаивать на глубину более метра. Впервые за 75 лет на Ямале регистрируется эпизоотия сибирской язвы.
+</div>
+<div class="history-block">
+<b>Исторический контекст.</b> Ситуация эпизодического неблагополучия по сибирской язве фиксировалась на Ямале с 1889 по 1941 год — зарегистрировано 68 эпизоотий. Последняя известная вспышка была в 1941 году, когда по обе стороны Тазовской губы пало 6700 оленей, при этом убрано было только 313. Все остальные остались на этой территории, образовав «моровые поля». Вакцинацию оленей отменили в 2007 году, руководствуясь утверждением, что в почвах Ямала возбудитель сибирской язвы выжить не может. Это решение оказалось фатальной ошибкой.
+</div>
+<div class="history-block">
+Начался массовый падеж оленей. Местные жители, считая, что олени погибают от теплового удара, употребляли в пищу их сырое мясо и свежую кровь. В поселок поступили дети с тяжелейшей интоксикацией. Более половины заболевших — дети старше года (52,8%): 27,8% в возрасте 11–17 лет; 11,1% — от 4 до 6 лет. Тяжелое течение наблюдалось только у детей (31,6% от заболевших детей) с желудочно-кишечной формой сибирской язвы.
+</div>
+<div class="history-block">
+В рамках противоэпидемических мероприятий химиопрофилактикой охвачено 946 человек, вакцинопрофилактикой — более 13 000 человек, проведена дератизация на площади более 103 000 м², обеззаражено более 240 бортов воздушных судов, более 7000 м² автотранспортных средств.
+</div>
+<div class="narrative">
+«Коллега, — говорит главный санитарный врач, — мы имеем дело с классической почвенной инфекцией, активированной климатом. Местные фельдшеры в панике, некоторые пытаются вскрывать карбункулы скальпелем. Нам нужно немедленно взять ситуацию под контроль. У нас есть считанные часы, чтобы предотвратить сепсис и менингит у выживших. Мне нужна Ваша помощь — Вы будете моим ассистентом.»
+</div>
+<h3>Ваше досье</h3>
+<label for="studentName">Имя и фамилия</label>
+<input type="text" id="studentName" placeholder="Например: Иванов И.И." autocomplete="off">
+<p style="font-size:13px;color:var(--grey);margin-top:8px">
+Вам предстоит пройти 15 миссий расследования. За каждую — до 10 баллов.
+Максимум — 150. Ошибка не останавливает квест, но лишает баллов за миссию.
+</p>
+<button class="btn" id="startBtn" disabled>Начать расследование</button>
+</div>
+`;
+const nameInput = document.getElementById('studentName');
+const startBtn = document.getElementById('startBtn');
+nameInput.addEventListener('input', ()=>{
+startBtn.disabled = nameInput.value.trim().length < 3;
+});
+startBtn.addEventListener('click', ()=>{
+state.studentName = nameInput.value.trim();
+state.currentMission = 1;
+renderMission(1);
+});
+}
+
+function renderMission(n){
+const m = missions[n];
+if(!m){ renderFinal(); return; }
+const answered = state.missionScores[n-1] !== null;
+
+let body = '';
+if(m.type === 'checkbox') body = renderCheckboxMission(m, n);
+else if(m.type === 'radio') body = renderRadioMission(m, n);
+else if(m.type === 'match') body = renderMatchMission(m, n);
+else if(m.type === 'order') body = renderOrderMission(m, n);
+else if(m.type === 'truefalse') body = renderTFMission(m, n);
+else if(m.type === 'dragdrop') body = renderDragDropMission(m, n);
+else if(m.type === 'svgclick') body = renderSvgClickMission(m, n);
+
+app.innerHTML = `
+<div class="card">
+<div class="mission-header">
+<div class="mission-number">${n}</div>
+<div class="mission-title">${m.title}</div>
+</div>
+<p class="lead">${m.narrative}</p>
+${m.image || ''}
+${body}
+<div id="feedbackArea"></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn" id="checkBtn" ${answered?'disabled':''}>${answered?'Миссия завершена':'Проверить ответ'}</button>
+<button class="btn btn-secondary" id="nextBtn" style="display:${answered?'inline-block':'none'}">Продолжить →</button>
+</div>
+</div>
+`;
+attachMissionHandlers(n);
+}
+
+function renderCheckboxMission(m, n){
+const saved = state.answers[n] || [];
+return `<div class="checkbox-group" id="cbGroup">${m.options.map(o=>`<label><input type="checkbox" value="${o.id}" ${saved.includes(o.id)?'checked':''}> ${o.text}</label>`).join('')}</div>`;
+}
+
+function renderRadioMission(m, n){
+const saved = state.answers[n];
+return `<div class="radio-group" id="radioGroup">${m.options.map(o=>`<label><input type="radio" name="radio" value="${o.id}" ${saved===o.id?'checked':''}> ${o.text}</label>`).join('')}</div>`;
+}
+
+function renderMatchMission(m, n){
+const saved = state.answers[n] || {};
+const shuffledOpts = getShuffledOptions(n, m.options);
+return `<div class="tf-grid">${m.items.map((it,i)=>`<div class="tf-item"><div class="tf-text"><b>${i+1}.</b> ${it.text}</div><select data-item="${it.id}"><option value="">— выберите —</option>${shuffledOpts.map(o=>`<option value="${o.id}" ${saved[it.id]===o.id?'selected':''}>${o.text}</option>`).join('')}</select></div>`).join('')}</div>`;
+}
+
+function renderOrderMission(m, n){
+const displayItems = getShuffledItems(n, m.items);
+const saved = state.answers[n] || [];
+return `
+<div class="order-instruction"><b>Как отвечать:</b> нажимайте на пункты <b>в нужном порядке</b> — от первого к последнему. Выбранные пункты получат номера 1, 2, 3… Чтобы отменить выбор, нажмите на пункт с номером — он и все последующие сбросятся.</div>
+<ul class="order-list" id="orderList">${displayItems.map((it)=>{const pos = saved.indexOf(it.id);const isSelected = pos >= 0;const num = isSelected ? (pos + 1) : '—';return `<li data-id="${it.id}" class="${isSelected?'selected':''}"><span class="step-num">${num}</span><span>${it.text}</span></li>`;}).join('')}</ul>
+<button class="btn btn-secondary" id="resetOrder" type="button" style="margin-top:8px">Сбросить порядок</button>
+`;
+}
+
+function renderTFMission(m, n){
+const saved = state.answers[n] || {};
+return `<div class="tf-grid">${m.items.map((it,i)=>`<div class="tf-item"><div class="tf-text"><b>${i+1}.</b> ${it.text}</div><select data-tf="${it.id}"><option value="">—</option><option value="true" ${saved[it.id]==='true'?'selected':''}>Верно</option><option value="false" ${saved[it.id]==='false'?'selected':''}>Неверно</option></select></div>`).join('')}</div>`;
+}
+
+function renderDragDropMission(m, n){
+const zones = initDragZones(n, m.items);
+const itemMap = Object.fromEntries(m.items.map(x=>[x.id, x]));
+const correctTitle = m.correctZoneTitle || '✓ Правильные действия';
+const wrongTitle = m.wrongZoneTitle || '✗ Категорически запрещены';
+return `
+<div class="order-instruction"><b>Как отвечать:</b> зажмите левую кнопку мыши на элементе и перетащите его в нужную зону. Отпустите кнопку мыши над зоной, чтобы поместить элемент туда.</div>
+<div class="drag-container">
+<div class="drag-zone correct-zone" data-zone="correctZone">
+<h4>${correctTitle}</h4>
+${zones.correctZone.map(id=>`<div class="drag-item" draggable="true" data-id="${id}">${itemMap[id].text}</div>`).join('')}
+</div>
+<div class="drag-zone wrong-zone" data-zone="wrongZone">
+<h4>${wrongTitle}</h4>
+${zones.wrongZone.map(id=>`<div class="drag-item" draggable="true" data-id="${id}">${itemMap[id].text}</div>`).join('')}
+</div>
+<div class="drag-zone pool-zone" data-zone="pool">
+<h4>Не распределено</h4>
+${zones.pool.map(id=>`<div class="drag-item" draggable="true" data-id="${id}">${itemMap[id].text}</div>`).join('')}
+</div>
+</div>
+`;
+}
+
+function renderSvgClickMission(m, n){
+const saved = state.answers[n] || [];
+return `
+<div class="order-instruction"><b>Как отвечать:</b> наведите мышкой на области схемы, чтобы увидеть их названия. Нажимайте на области, которые соответствуют правильным ответам. Повторный клик снимает выбор. Венчик дочерних пузырьков («симптом жемчужного ожерелья») выделяется целиком при нажатии на любой пузырек.</div>
+<div class="svg-click-area" id="svgArea">${m.svg}<div class="svg-tooltip" id="svgTooltip"></div></div>
+`;
+}
+
+function attachMissionHandlers(n){
+const m = missions[n];
+const checkBtn = document.getElementById('checkBtn');
+const nextBtn = document.getElementById('nextBtn');
+const feedback = document.getElementById('feedbackArea');
+const answered = state.missionScores[n-1] !== null;
+
+const resetBtn = document.getElementById('resetOrder');
+if(resetBtn){resetBtn.addEventListener('click', ()=>{state.answers[n] = [];renderMission(n);});}
+
+const orderList = document.getElementById('orderList');
+if(orderList){
+orderList.querySelectorAll('li').forEach(li=>{
+li.addEventListener('click', ()=>{
+if(answered) return;
+const id = li.dataset.id;
+const current = [...(state.answers[n] || [])];
+const idx = current.indexOf(id);
+if(idx >= 0){current.splice(idx);} else {current.push(id);}
+state.answers[n] = current;
+renderMission(n);
+});
+});
+}
+
+// Drag and Drop handlers
+const dragItems = document.querySelectorAll('.drag-item');
+const dragZones = document.querySelectorAll('.drag-zone');
+let draggedId = null;
+
+dragItems.forEach(item=>{
+item.addEventListener('dragstart', (e)=>{
+if(answered) {e.preventDefault(); return;}
+draggedId = item.dataset.id;
+item.classList.add('dragging');
+e.dataTransfer.effectAllowed = 'move';
+e.dataTransfer.setData('text/plain', draggedId);
+});
+
+item.addEventListener('dragend', (e)=>{
+item.classList.remove('dragging');
+draggedId = null;
+dragZones.forEach(z=>z.classList.remove('drag-over'));
+});
+});
+
+dragZones.forEach(zone=>{
+zone.addEventListener('dragover', (e)=>{
+e.preventDefault();
+e.dataTransfer.dropEffect = 'move';
+zone.classList.add('drag-over');
+});
+
+zone.addEventListener('dragleave', (e)=>{
+zone.classList.remove('drag-over');
+});
+
+zone.addEventListener('drop', (e)=>{
+e.preventDefault();
+zone.classList.remove('drag-over');
+if(answered || !draggedId) return;
+
+const id = draggedId;
+const zones = state.dragZones[n];
+
+for(const z of ['correctZone','wrongZone','pool']){
+zones[z] = zones[z].filter(x=>x!==id);
+}
+
+const targetZone = zone.dataset.zone;
+zones[targetZone].push(id);
+
+renderMission(n);
+});
+});
+
+// SVG tooltip and click
+const svgArea = document.getElementById('svgArea');
+const tooltip = document.getElementById('svgTooltip');
+if(svgArea && tooltip){
+svgArea.querySelectorAll('.clickable').forEach(el=>{
+el.addEventListener('mouseenter', (e)=>{
+const label = el.dataset.label;
+if(label){
+tooltip.textContent = label;
+tooltip.classList.add('visible');
+}
+});
+el.addEventListener('mousemove', (e)=>{
+const rect = svgArea.getBoundingClientRect();
+tooltip.style.left = (e.clientX - rect.left + 10) + 'px';
+tooltip.style.top = (e.clientY - rect.top - 30) + 'px';
+});
+el.addEventListener('mouseleave', ()=>{
+tooltip.classList.remove('visible');
+});
+el.addEventListener('click', ()=>{
+if(answered) return;
+const id = el.dataset.id;
+if(!state.answers[n]) state.answers[n] = [];
+const arr = state.answers[n];
+
+// Группировка пузырьков: если клик по bubbles — переключить все bubbles
+if(id === 'bubbles'){
+const allBubbles = svgArea.querySelectorAll('.clickable[data-id="bubbles"]');
+const isSelected = arr.includes('bubbles');
+if(isSelected){
+state.answers[n] = arr.filter(x=>x!=='bubbles');
+allBubbles.forEach(b=>b.classList.remove('active','wrong-active'));
+} else {
+state.answers[n] = [...arr, 'bubbles'];
+allBubbles.forEach(b=>b.classList.add('active'));
+}
+} else {
+if(arr.includes(id)){
+state.answers[n] = arr.filter(x=>x!==id);
+el.classList.remove('active','wrong-active');
+} else {
+state.answers[n] = [...arr, id];
+el.classList.add('active');
+}
+}
+});
+});
+}
+
+checkBtn.addEventListener('click', ()=>{
+let correct = false;
+
+if(m.type === 'checkbox'){
+const checked = [...document.querySelectorAll('#cbGroup input:checked')].map(x=>x.value);
+state.answers[n] = checked;
+correct = checked.length === m.correctIds.length && m.correctIds.every(id=>checked.includes(id));
+}
+else if(m.type === 'radio'){
+const sel = document.querySelector('input[name="radio"]:checked');
+if(!sel){ feedback.innerHTML='<div class="feedback">Выберите один из вариантов.</div>'; return; }
+state.answers[n] = sel.value;
+correct = sel.value === m.correctId;
+}
+else if(m.type === 'match'){
+const ans = {};
+document.querySelectorAll('.tf-grid select').forEach(s=>{ans[s.dataset.item] = s.value;});
+state.answers[n] = ans;
+if(Object.values(ans).some(v=>v==='')){feedback.innerHTML='<div class="feedback">Заполните все соответствия.</div>'; return;}
+correct = m.items.every(it=>ans[it.id] === it.correct);
+}
+else if(m.type === 'order'){
+const ordered = state.answers[n] || [];
+if(ordered.length !== m.items.length){feedback.innerHTML=`<div class="feedback">Выбрано пунктов: ${ordered.length} из ${m.items.length}. Расставьте все пункты в правильном порядке.</div>`;return;}
+correct = ordered.every((id,i)=>m.items[i].id === id);
+}
+else if(m.type === 'truefalse'){
+const ans = {};
+document.querySelectorAll('.tf-grid select').forEach(s=>{ans[s.dataset.tf] = s.value;});
+state.answers[n] = ans;
+if(Object.values(ans).some(v=>v==='')){feedback.innerHTML='<div class="feedback">Ответьте на все утверждения.</div>'; return;}
+correct = m.items.every(it=>ans[it.id] === String(it.correct));
+}
+else if(m.type === 'dragdrop'){
+const zones = state.dragZones[n];
+if(zones.pool.length > 0){
+feedback.innerHTML = `<div class="feedback">Не распределено элементов: ${zones.pool.length}. Перетащите все элементы в соответствующие зоны.</div>`;
+return;
+}
+const itemMap = Object.fromEntries(m.items.map(x=>[x.id, x]));
+const correctInCorrect = zones.correctZone.every(id=>itemMap[id].zone==='correct');
+const wrongInWrong = zones.wrongZone.every(id=>itemMap[id].zone==='wrong');
+const allDistributed = zones.correctZone.length + zones.wrongZone.length === m.items.length;
+correct = correctInCorrect && wrongInWrong && allDistributed;
+document.querySelectorAll('.drag-item').forEach(el=>{
+const id = el.dataset.id;
+const parent = el.parentElement.dataset.zone;
+if(parent === 'correctZone' && itemMap[id].zone === 'correct') el.classList.add('correct');
+else if(parent === 'wrongZone' && itemMap[id].zone === 'wrong') el.classList.add('correct');
+else el.classList.add('wrong');
+});
+}
+else if(m.type === 'svgclick'){
+const selected = state.answers[n] || [];
+const allCorrectSelected = m.correctIds.every(id=>selected.includes(id));
+const noWrongSelected = m.wrongIds.every(id=>!selected.includes(id));
+const exactMatch = selected.length === m.correctIds.length;
+correct = allCorrectSelected && noWrongSelected && exactMatch;
+document.querySelectorAll('.svg-click-area svg .clickable').forEach(el=>{
+const id = el.dataset.id;
+if(selected.includes(id)){
+if(m.correctIds.includes(id)) el.classList.add('active');
+else el.classList.add('wrong-active');
+}
+});
+}
+
+state.missionScores[n-1] = correct ? 10 : 0;
+if(correct) state.score += 10;
+updateScore();
+
+if(correct){feedback.innerHTML = `<div class="feedback success"><b>✓ ${m.successText}</b></div>`;}
+else {feedback.innerHTML = `<div class="feedback"><b>✗ Не совсем верно.</b> ${m.hint}</div>`;}
+checkBtn.disabled = true;
+nextBtn.style.display = 'inline-block';
+});
+
+nextBtn.addEventListener('click', ()=>{state.currentMission = n + 1;renderMission(n + 1);});
+}
+
+function renderFinal(){
+const today = new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'long',year:'numeric'});
+const pct = state.score;
+let reflection = '';
+if(pct >= 135) reflection = 'Вы продемонстрировали отличное знание эпидемиологии, клиники и лечения сибирской язвы. Вы готовы к работе в очаге особо опасной инфекции.';
+else if(pct >= 105) reflection = 'Вы успешно отработали ключевые навыки диагностики сибирской язвы. Есть небольшие пробелы — повторите классификацию форм и тактику ведения карбункула.';
+else if(pct >= 75) reflection = 'Вы знакомы с основами, но некоторые клинические проявления и правила безопасности требуют повторения. Рекомендуем вернуться к лекции.';
+else reflection = 'Расследование выявило существенные пробелы. Сибирская язва — смертельно опасная инфекция, ошибок не прощает. Обязательно повторите материал.';
+
+app.innerHTML = `
+<div class="card">
+<h1>Расследование завершено</h1>
+<div class="history-block">
+Благодаря вашим действиям очаг на Ямале был локализован. Пациенты получили специфическую терапию, проведена экстренная профилактика контактным лицам. Трупы больных животных утилизированы с соблюдением всех санитарных норм.
+</div>
+<div class="history-block">
+Вспышка 2016 года на Ямале стала суровым напоминанием о том, что сибирская язва — это не болезнь прошлого. Изменение климата, таяние вечной мерзлоты и отказ от вакцинации могут в любой момент реактивировать «моровые поля», спящие в почве десятилетиями.
+</div>
+<h3>Итоговый счёт: ${pct} / 150</h3>
+<p class="lead">${reflection}</p>
+<div class="hint">
+<b>Ключевые выводы:</b> сибирская язва — зооноз с почвенным резервуаром. Клиника зависит от входных ворот (кожная, ингаляционная, ЖКТ, инъекционная). Карбункул вскрывать нельзя! Лечение — мощные антибиотики + дезинтоксикация. Профилактика — вакцинация животных и людей из групп риска.
+</div>
+</div>
+
+<div class="certificate" id="certificate">
+<h2>СЕРТИФИКАТ</h2>
+<h3>об успешном прохождении квеста<br>«Дело №2016: Трагедия Ямала»</h3>
+<p style="margin:14px 0">Настоящий сертификат подтверждает, что</p>
+<div class="cert-field">${state.studentName || '____________________'}</div>
+<p style="margin:14px 0">прошёл(а) расследование вспышки сибирской язвы на Ямале (2016 г.)</p>
+<p style="margin:14px 0">и набрал(а) <b>${pct} из 150 баллов</b></p>
+<div style="display:flex;justify-content:space-around;margin-top:30px;flex-wrap:wrap;gap:20px">
+<div><div class="cert-label">Дата</div><div class="cert-field">${today}</div></div>
+<div><div class="cert-label">Место для подписи</div><div class="cert-field" style="min-width:200px"></div></div>
+</div>
+<p style="margin-top:24px;font-size:12px;color:var(--grey);font-style:italic">
+Составитель квеста — к.м.н., доцент кафедры инфекционных болезней и фтизиатрии РязГМУ Шутова О.В.
+</p>
+</div>
+
+<div class="no-print" style="text-align:center">
+<button class="btn" id="printBtn">Распечатать сертификат</button>
+<button class="btn btn-secondary" id="restartBtn" style="margin-left:10px">Начать заново</button>
+</div>
+`;
+
+document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+document.getElementById('restartBtn').addEventListener('click', ()=>{
+state.studentName = '';state.currentMission = 0;state.score = 0;
+state.missionScores = new Array(15).fill(null);state.answers = {};
+state.shuffledOrders = {};state.shuffledOptions = {};state.dragZones = {};
+updateScore();renderStart();
+});
+}
+
+updateScore();
+renderStart();
+</script>
+</body>
+</html>
